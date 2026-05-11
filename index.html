@@ -3,107 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Livescore Đa Thể Thao (Có Logo)</title>
+    <title>SportPulse - Tỷ Số Trực Tuyến Thế Hệ Mới</title>
+    <!-- Chèn Font chuyên nghiệp từ Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f0f2f5;
-            --card-bg: #ffffff;
-            --primary: #1a365d;
-            --accent: #d32f2f;
+            /* Bảng màu Dark Mode sang trọng */
+            --bg-body: #0a0e17; /* Xám đen nền */
+            --bg-card: #141a29; /* Xám nhẹ cho thẻ */
+            --text-main: #f1f5f9; /* Trắng xám */
+            --text-muted: #94a3b8; /* Xám mờ cho thông tin phụ */
+            
+            /* Màu nhấn mạnh (Accent) */
+            --primary: #38bdf8; /* Xanh trời công nghệ */
+            --accent-live: #ef4444; /* Đỏ rực cho trạng thái LIVE */
+            --border: #262f45; /* Màu đường kẻ */
+            
+            /* Thống số hệ thống */
+            --max-width: 1300px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: var(--bg-color);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            line-height: 1.5;
         }
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .update-info {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 5px;
-        }
-        .league-section {
-            max-width: 1200px;
-            margin: 0 auto 40px auto;
-        }
-        .league-title {
-            color: var(--primary);
-            text-transform: uppercase;
-            border-left: 5px solid var(--primary);
-            padding-left: 15px;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
-        .matches-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-        }
-        .match-card {
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        .status {
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.8em;
-            color: var(--accent);
-            margin-bottom: 12px;
-            background: #ffebee;
-            padding: 3px 10px;
-            border-radius: 5px;
-            display: inline-block;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .team-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .team-row:last-child {
-            border-bottom: none;
-        }
-        /* Style cho phần tên và logo đi kèm nhau */
-        .team-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .team-logo {
-            width: 25px;
-            height: 25px;
-            object-fit: contain;
-        }
-        .team-name {
-            font-weight: 500;
-        }
-        .score {
-            font-size: 1.3em;
-            font-weight: 800;
-            min-width: 30px;
-            text-align: right;
-        }
+
+        /* Thanh tải dữ liệu mỏng, tinh tế trên cùng */
         .loading-bar {
-            height: 4px;
-            background: var(--primary);
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), #a855f7);
             position: fixed;
             top: 0;
             left: 0;
             width: 0%;
-            transition: width 0.3s;
+            transition: width 0.4s ease;
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
         }
+
+        /* Header tối giản */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: radial-gradient(circle at center, #1e293b 0%, var(--bg-body) 70%);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(180deg, #fff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header h1 span {
+            color: var(--primary);
+            -webkit-text-fill-color: var(--primary);
+        }
+
+        .update-info {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Container chính */
+        #app {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px 60px 20px;
+        }
+
+        /* Section giải đấu */
+        .league-section {
+            margin-bottom: 50px;
+        }
+
+        .league-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .league-title {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-main);
+        }
+
+        /* Lưới trận đấu: Hiển thị dạng bảng (Table-like) trên desktop */
+        .matches-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        /* Thẻ trận đấu mới: Tối giản, dạng dòng */
+        .match-card {
+            background-color: var(--bg-card);
+            border: 1px solid transparent;
+            border-radius: 12px;
+            padding: 15px 25px;
+            display: grid;
+            /* Lưới: Trạng thái | Đội nhà | Tỷ số | Đội khách */
+            grid-template-columns: 100px 1fr 120px 1fr;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .match-card:hover {
+            border-color: var(--border);
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Trạng thái trận đấu */
+        .match-status-container {
+            text-align: left;
+        }
+
+        .status {
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            background-color: #262f45;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        /* Trạng thái LIVE nổi bật */
+        .status.is-live {
+            color: #fff;
+            background-color: var(--accent-live);
+            animation: pulse 2s infinite;
+        }
+
+        /* Info đội bóng */
+        .team-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .team-info.home {
+            justify-content: flex-end; /* Đội nhà nằm bên phải container */
+            text-align: right;
+        }
+
+        .team-info.away {
+            justify-content: flex-start; /* Đội khách nằm bên trái container */
+            text-align: left;
+        }
+
+        .team-logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            /* Thêm shadow nhẹ cho logo */
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .team-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        /* Container Tỷ số */
+        .score-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-family: 'Inter', monospace; /* Dùng font monospace cho số */
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .score-divider {
+            color: var(--border);
+            font-size: 1.5rem;
+            font-weight: 400;
+        }
+
+        /* Xử lý không có trận đấu */
         .no-matches {
-            color: #777;
+            color: var(--text-muted);
             font-style: italic;
+            text-align: center;
+            padding: 30px;
+            background-color: rgba(20, 26, 41, 0.5);
+            border-radius: 12px;
+            border: 1px dashed var(--border);
+        }
+
+        /* Animation cho trạng thái LIVE */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        /* Tương thích MOBILE (Responsive) */
+        @media (max-width: 850px) {
+            .match-card {
+                grid-template-columns: 1fr; /* Chuyển thành 1 cột */
+                gap: 15px;
+                padding: 20px;
+                text-align: center;
+            }
+
+            .match-status-container {
+                text-align: center;
+            }
+
+            .team-info.home, .team-info.away {
+                justify-content: center;
+                text-align: center;
+                flex-direction: column; /* Logo trên, tên dưới */
+                gap: 5px;
+            }
+
+            .team-logo {
+                width: 40px;
+                height: 40px;
+            }
+
+            .score-container {
+                margin: 10px 0;
+            }
+
+            .score {
+                font-size: 2.5rem;
+            }
         }
     </style>
 </head>
@@ -112,8 +269,12 @@
     <div id="progress" class="loading-bar"></div>
 
     <header>
-        <h1>🏆 Tổng Hợp Tỷ Số Thể Thao</h1>
-        <div id="last-update" class="update-info">Đang tải dữ liệu...</div>
+        <h1><span>Sport</span>Pulse</h1>
+        <div id="last-update" class="update-info">
+            <!-- Icon refresh nhỏ -->
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+            <span id="update-text">Đang tải...</span>
+        </div>
     </header>
 
     <div id="app"></div>
@@ -121,13 +282,21 @@
     <script>
         const REFRESH_INTERVAL = 30000;
 
+        // Hàm helper để kiểm tra xem trận đấu có đang trực tiếp không
+        function isLive(statusShortDetail) {
+            // Danh sách các từ khóa trạng thái live của ESPN
+            const liveKeywords = ['1ST', '2ND', 'HALF', 'HT', 'OT', 'LIVE', 'Q1', 'Q2', 'Q3', 'Q4'];
+            return liveKeywords.some(keyword => statusShortDetail.toUpperCase().includes(keyword));
+        }
+
         async function updateScores() {
             const progressBar = document.getElementById('progress');
-            const lastUpdateLabel = document.getElementById('last-update');
+            const updateText = document.getElementById('update-text');
             
             try {
                 progressBar.style.width = '30%';
                 
+                // Gọi API
                 const response = await fetch('/api');
                 const result = await response.json();
                 
@@ -135,14 +304,14 @@
                 renderData(result.results);
                 
                 const now = new Date();
-                lastUpdateLabel.innerText = `Cập nhật: ${now.toLocaleTimeString()} (Tự động tải lại sau 30s)`;
+                updateText.innerText = `Cập nhật: ${now.toLocaleTimeString()}`;
                 
                 progressBar.style.width = '100%';
                 setTimeout(() => progressBar.style.width = '0%', 500);
 
             } catch (error) {
                 console.error("Lỗi:", error);
-                lastUpdateLabel.innerText = "Lỗi cập nhật. Đang thử lại...";
+                updateText.innerText = "Lỗi kết nối. Đang thử lại...";
             }
         }
 
@@ -159,13 +328,16 @@
                 
                 let leagueHtml = `
                     <div class="league-section">
-                        <h2 class="league-title">${leagueName}</h2>
+                        <div class="league-header">
+                            <!-- Có thể thêm logo giải đấu vào đây nếu API trả về -->
+                            <h2 class="league-title">${leagueName}</h2>
+                        </div>
                 `;
 
                 if (events.length === 0) {
-                    leagueHtml += `<div class="no-matches">Không có trận đấu nào đang/sắp diễn ra hôm nay.</div></div>`;
+                    leagueHtml += `<div class="no-matches">Hôm nay không có trận đấu nào.</div></div>`;
                     fullHtml += leagueHtml;
-                    return; // Chuyển sang giải đấu tiếp theo
+                    return;
                 }
 
                 leagueHtml += `<div class="matches-grid">`;
@@ -177,30 +349,36 @@
                     const home = comps.find(c => c.homeAway === 'home');
                     const away = comps.find(c => c.homeAway === 'away');
 
-                    // Lấy logo (nếu không có logo thì dùng ảnh trắng mờ)
                     const homeLogo = home.team.logo || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
                     const awayLogo = away.team.logo || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 
+                    // Kiểm tra trạng thái LIVE để add class CSS
+                    const liveClass = isLive(status) ? 'is-live' : '';
+
                     leagueHtml += `
                         <div class="match-card">
-                            <div class="status">${status}</div>
-                            
-                            <!-- Đội nhà -->
-                            <div class="team-row">
-                                <div class="team-info">
-                                    <img src="${homeLogo}" alt="Logo" class="team-logo">
-                                    <span class="team-name">${home.team.displayName}</span>
-                                </div>
-                                <span class="score">${home.score || '-'}</span>
+                            <!-- 1. Trạng thái -->
+                            <div class="match-status-container">
+                                <span class="status ${liveClass}">${status}</span>
                             </div>
                             
-                            <!-- Đội khách -->
-                            <div class="team-row">
-                                <div class="team-info">
-                                    <img src="${awayLogo}" alt="Logo" class="team-logo">
-                                    <span class="team-name">${away.team.displayName}</span>
-                                </div>
-                                <span class="score">${away.score || '-'}</span>
+                            <!-- 2. Đội nhà -->
+                            <div class="team-info home">
+                                <span class="team-name">${home.team.displayName}</span>
+                                <img src="${homeLogo}" alt="Logo" class="team-logo">
+                            </div>
+                            
+                            <!-- 3. Tỷ số -->
+                            <div class="score-container">
+                                <span class="score">${home.score || '0'}</span>
+                                <span class="score-divider">:</span>
+                                <span class="score">${away.score || '0'}</span>
+                            </div>
+                            
+                            <!-- 4. Đội khách -->
+                            <div class="team-info away">
+                                <img src="${awayLogo}" alt="Logo" class="team-logo">
+                                <span class="team-name">${away.team.displayName}</span>
                             </div>
                         </div>
                     `;
